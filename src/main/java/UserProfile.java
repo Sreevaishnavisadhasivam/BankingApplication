@@ -1,0 +1,60 @@
+
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
+import com.Banking.AccountHolder;
+import com.Banking.Accountholderdetails;
+
+/**
+ * Servlet implementation class UserProfile
+ */
+@WebServlet("/UserProfile")
+public class UserProfile extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public UserProfile() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession Session = request.getSession();
+        if(Session.getAttribute("Email")!=null){
+		AccountHolder acco=new AccountHolder();
+	    Accountholderdetails accodet=new Accountholderdetails();
+	    String email=(String)request.getAttribute("Email");
+	    accodet.setEmailid(email);
+	    try {
+			acco.viewProfile(email);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    response.sendRedirect("Userprofile.jsp");
+        }
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
